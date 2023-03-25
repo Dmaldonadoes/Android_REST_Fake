@@ -75,7 +75,7 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
             if ( ! this.elMetodo.equals("GET") && this.elCuerpo != null ) {
                 Log.d("clienterestandroid", "doInBackground(): no es get, pongo cuerpo");
                 connection.setDoOutput(true);
-                // si no es GET, pongo el cuerpo que me den en la peticin
+                // si no es GET, pongo el cuerpo que me den en la peticion
                 DataOutputStream dos = new DataOutputStream (connection.getOutputStream());
                 dos.writeBytes(this.elCuerpo);
                 dos.flush();

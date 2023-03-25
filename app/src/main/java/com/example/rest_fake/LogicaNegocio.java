@@ -72,9 +72,7 @@ https://httpbin.org/delete Returns DELETE data
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
-    public static void pedirAlgoAlServidorRest( String parametroQueNoUso, /*porque es una prueba*/
-                                               Respuesta responder
-    ) {
+    public static void pedirAlgoAlServidorRest( String parametroQueNoUso /*porque es una prueba*/, Respuesta responder) {
         Log.d( "primeraApp", "LogicaNegocio.pedirAlgoAlServidorRest(): empieza");
 
         PeticionarioREST elPeticionario = new PeticionarioREST();
