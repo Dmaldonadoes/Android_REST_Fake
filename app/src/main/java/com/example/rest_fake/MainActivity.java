@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.rest_fake.LogicaNegocio;
 import com.example.rest_fake.PeticionarioREST;
 
 public class MainActivity extends AppCompatActivity {
+    private EditText nombreusuario;
+    private TextView textoRespuesta;
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
@@ -37,12 +41,17 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------------------------------
     public void boton_pedir_pulsado( View quien ) { // <--- callback del boton
         Log.d( "primeraApp", "MainActivity.boton_pedir_pulsado(): empieza");
-
-        LogicaNegocio.pedirAlgoAlServidorRest( "hola",
+        nombreusuario = (EditText)findViewById(R.id.editTextNumberPassword);
+        textoRespuesta = (TextView)findViewById(R.id.textView);
+        String nombreusuarioString = nombreusuario.getText().toString();
+        Log.d("nombreusuariodado", nombreusuario.toString());
+        LogicaNegocio.pedirAlgoAlServidorRest( nombreusuarioString,
                 ( resultados ) -> {
 
                     Log.d( "primeraApp", "MainActivity.boton_ok_pulsado(): resultados: "
-                            + resultados.getString("resultadoSinParsear" ) );
+                            + resultados.getString("correo" ) );
+
+                    textoRespuesta.setText(resultados.getString("correo" ));
 
                 });
 

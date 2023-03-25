@@ -4,6 +4,11 @@ package com.example.rest_fake;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.util.Optional;
 
 // -------------------------------------------------------------------------------------------------
@@ -72,7 +77,7 @@ https://httpbin.org/delete Returns DELETE data
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
-    public static void pedirAlgoAlServidorRest( String parametroQueNoUso /*porque es una prueba*/, Respuesta responder) {
+    public static void pedirAlgoAlServidorRest( String username, Respuesta responder) {
         Log.d( "primeraApp", "LogicaNegocio.pedirAlgoAlServidorRest(): empieza");
 
         PeticionarioREST elPeticionario = new PeticionarioREST();
@@ -84,20 +89,35 @@ https://httpbin.org/delete Returns DELETE data
                 new PeticionarioREST.RespuestaREST() { /* se puede abreviar: (codigo, cuerpo) -> { .... } */
                     @Override
                     public void callback(int codigo, String cuerpo) {
-                      Log.d( "primeraApp", "LogicaNegocio.pedirAlgoAlServidorRest().callback: recibo: " + codigo );
+                        Log.d( "primeraApp", "LogicaNegocio.pedirAlgoAlServidorRest().callback: recibo: " + codigo );
 
                       /* aquí deberíamos analizar la respuesta REST+HTTP. Si es correcta, parsear el resultado
                          que estará en JSON (pero como un único texto) para sacar las partes que nos interesen.
-                         
+
                          Luego, ponemos las respuestas ya pasadas al tipo correcto en bundle (almacén clave-valor)
                          y llamamos al callback que está esperando en la parte de UX
                          */
-                      Bundle res = new Bundle();
-                      res.putInt( "codigo", codigo );
-                      res.putString( "resultadoSinParsear", cuerpo );
-                      responder.callback( res );
+                        Bundle res = new Bundle();
+                        res.putInt( "codigo", codigo );
+                        res.putString( "resultadoSinParsear", cuerpo );
+                        JsonArray jsonArray = JsonParser.parseString(cuerpo).getAsJsonArray();
+                        JsonObject jsonObject = null;
+                        for (JsonElement jsonElement : jsonArray) {
+                            jsonObject = jsonElement.getAsJsonObject();
+                            Log.d("JSONArray", jsonObject.toString());
+                            if (jsonObject.get("username").getAsString().equals(username)) {
+                                res.putString("correo",jsonObject.get("email").getAsString() );
+                                break;
+                            }
+                        }
+                        responder.callback( res );
 
-                      Log.d( "primeraApp", "LogicaNegocio.pedirAlgoAlServidorRest().callback: recibo: " + cuerpo );
+
+
+
+
+
+                        Log.d( "primeraApp", "LogicaNegocio.pedirAlgoAlServidorRest().callback: recibo: " + cuerpo );
 
                     }
                 } );
